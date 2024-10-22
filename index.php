@@ -1,37 +1,38 @@
+<?php
+// Database configuration
+$host = 'localhost';
+$dbname = 'test_db';
+$username = 'root'; // Change this according to your configuration
+$password = ''; // Change this according to your configuration
 
+// Create connection
+$conn = new mysqli($host, $username, $password, $dbname);
 
-$servername = "localhost";
-$username = "root"; 
-$password = "";    
-$dbname = "user_management";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] == 'add') {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $stmt = $conn->prepare("INSERT INTO users (username, email) VALUES (?, ?)");
-    $stmt->bind_param("ss", $username, $email);
-    $stmt->execute();
-    $stmt->close();
+// Handle form submissions
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['add'])) {
+        $name = $_POST['name'];
+        $sql = "INSERT INTO users (name) VALUES ('$name')";
+        $conn->query($sql);
+    } elseif (isset($_POST['update'])) {
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $sql = "UPDATE users SET name='$name' WHERE id=$id";
+        $conn->query($sql);
+    } elseif (isset($_POST['delete'])) {
+        $id = $_POST['id'];
+        $sql = "DELETE FROM users WHERE id=$id";
+        $conn->query($sql);
+    }
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'delete') {
-    $id = $_GET['id'];
-    $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $stmt->close();
-}
-
-$searchQuery = "";
-if (isset($_POST['search'])) {
-    $searchQuery = $_POST['search'];
-}
+// Fetch users
+$result = $conn->query("SELECT * FROM users");
 ?>
 
 <!DOCTYPE html>
@@ -39,56 +40,43 @@ if (isset($_POST['search'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management System</title>
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>PHP CRUD Application</title>
 </head>
 <body>
-    <div class="container">
-        <h2>User Management</h2>
+    <h1>PHP CRUD Application</h1>
 
-        <form method="POST" action="">
-            <input type="text" name="username" placeholder="Enter Username" required>
-            <input type="email" name="email" placeholder="Enter Email" required>
-            <button type="submit" name="action" value="add">Add User</button>
-        </form>
+    <form method="POST">
+        <input type="text" name="name" placeholder="Enter name" required>
+        <button type="submit" name="add">Add User</button>
+    </form>
 
-        <form method="POST" action="">
-            <input type="text" name="search" placeholder="Search User by Name" value="<?php echo $searchQuery; ?>">
-            <button type="submit">Search</button>
-        </form>
+    <h2>Users List</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        <?php while ($row = $result->fetch_assoc()): ?>
+        <tr>
+            <td><?= $row['id'] ?></td>
+            <td><?= $row['name'] ?></td>
+            <td>
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                    <input type="text" name="name" value="<?= $row['name'] ?>" required>
+                    <button type="submit" name="update">Update</button>
+                </form>
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                    <button type="submit" name="delete">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <?php endwhile; ?>
+    </table>
 
-
-        <h3>User List</h3>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Action</th>
-            </tr>
-            <?php
-            $sql = "SELECT * FROM users WHERE username LIKE ?";
-            $searchParam = "%" . $searchQuery . "%";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("s", $searchParam);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $row['id'] . "</td>";
-                echo "<td>" . $row['username'] . "</td>";
-                echo "<td>" . $row['email'] . "</td>";
-                echo "<td><a href='?action=delete&id=" . $row['id'] . "' onclick=\"return confirm('Are you sure you want to delete this user?');\">Delete</a></td>";
-                echo "</tr>";
-            }
-            $stmt->close();
-            ?>
-        </table>
-    </div>
-
+    <?php $conn->close(); ?>
 </body>
 </html>
-
-<?php
-$conn->close();
-?>
