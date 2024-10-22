@@ -1,161 +1,30 @@
-
-
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f7f8fc;
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
     color: #333;
-}
-
-.container {
-    width: 100%;
-    max-width: 450px;
-    margin: 80px auto;
-    background-color: #fff;
-    padding: 40px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-input[type="text"], input[type="email"], input[type="password"] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-button {
-    width: 100%;
-    background-color: #000000;
-    color: white;
-    padding: 12px 20px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #000000;
-}
-
-a {
-    color: #000000;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-.message {
-    text-align: center;
-    padding: 10px;
-    color: red;
-}
-
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-table th, table td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-}
-
-table th {
-    background-color: #f2f2f2;
-}
-
-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-table tr:hover {
-    background-color: #ddd;
-}
-
-table a {
-    color: #d9534f;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-table a:hover {
-    text-decoration: underline;
-}
-
-table td a {
-    color: #d9534f;
-}
-
-.logout-link {
-    display: block;
-    text-align: center;
-    margin-top: 20px;
-    color: #333;
-    font-weight: bold;
-}
-
-.logout-link:hover {
-    color: #d9534f;
 }
 
 form {
     margin-bottom: 20px;
 }
 
-input[type="search"] {
-    width: calc(100% - 22px); 
-    padding: 12px;
-    margin-bottom: 10px;
-    border-radius: 4px;
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
     border: 1px solid #ccc;
 }
 
-input[type="submit"] {
-    width: 100%;
-    background-color: #5bc0de;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
+th, td {
+    padding: 10px;
+    text-align: left;
 }
 
-input[type="submit"]:hover {
-    background-color: #46b8da;
-}
-
-.logout-btn {
-    background-color: #d9534f;
-}
-
-.logout-btn:hover {
-    background-color: #c9302c;
-}
-
-@media screen and (max-width: 768px) {
-    .container {
-        width: 90%;
-        padding: 20px;
-    }
+th {
+    background-color: #f4f4f4;
 }
